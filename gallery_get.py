@@ -41,6 +41,7 @@ STANDBY = False
 THREADS = []
 MAX_ATTEMPTS = 10
 ERRORS_ENCOUNTERED = False
+INDEX = 0 # persistent global item sequence name
 
 TEXTCHARS = ''.join(map(chr, [7,8,9,10,12,13,27] + list(range(0x20, 0x100))))
 DESTPATH_FILE = os.path.join(os.path.dirname(str(__file__)), "last_gallery_dest.txt")
@@ -144,7 +145,7 @@ class JobInfo(object):
         self.override = None
 
     def destination_filename(self):
-        indexstr = "%03d" % self.index # 001, 002, etc.
+        indexstr = "%04d" % self.index # 0001, 0002, etc.
 
         basename = self.subtitle
         if self.override:
@@ -207,8 +208,11 @@ def flush_jobs():
 
 def add_job(plugin=None, subtitle="", path="", redirect="", dest="", index=0):
     global QUEUE
+    global INDEX
     start_jobs()
-    QUEUE.put(JobInfo(plugin=plugin, subtitle=subtitle, path=path, redirect=redirect, dest=dest, index=index))
+    #QUEUE.put(JobInfo(plugin=plugin, subtitle=subtitle, path=path, redirect=redirect, dest=dest, index=index))
+    INDEX=INDEX+1
+    QUEUE.put(JobInfo(plugin=plugin, subtitle=subtitle, path=path, redirect=redirect, dest=dest, index=INDEX))
 
 
 class ImgThread(threading.Thread):
