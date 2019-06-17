@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 # GALLERY_GET is a tool for downloading images from a gallery page.
 #
 # ABOUT THIS TOOL
